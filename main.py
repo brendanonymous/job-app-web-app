@@ -15,6 +15,14 @@ def get_job_applications(filename: str = 'applications.csv') -> list[Application
     
     return job_applications
 
+def get_link_color(source: str, target: str) -> str:
+    if target == "Rejected":
+        return "rgba(255,80,80,0.35)"
+    if target == "Offer":
+        return "rgba(80,200,120,0.35)"
+    if target.startswith("Interview"):
+        return "rgba(80,140,255,0.35)"
+    return "rgba(160,160,160,0.25)"
 
 def create_sankey_diagram(applications: list[ApplicationSnapshot]) -> None:
     edge_counts = Counter()
@@ -26,10 +34,6 @@ def create_sankey_diagram(applications: list[ApplicationSnapshot]) -> None:
 
         for src, dst in zip(path, path[1:]):
             edge_counts[(src, dst)] += 1
-    
-    print(edge_counts)
-
-    
 
     node_value_lookup = {
                         "Applied":0,
@@ -47,11 +51,13 @@ def create_sankey_diagram(applications: list[ApplicationSnapshot]) -> None:
     source = []
     target = []
     value = []
+    color = []
 
     for (src, dst), val in edge_counts.items():
-        source.append(src)
-        target.append(dst)
+        source.append(node_value_lookup[src])
+        target.append(node_value_lookup[dst])
         value.append(val)
+        color.append(get_link_color(src, dst))
 
     fig = go.Figure(
         data=[
@@ -71,17 +77,17 @@ def create_sankey_diagram(applications: list[ApplicationSnapshot]) -> None:
                         "Interview 5",
                         "Interview 6",
                         "Rejected",
-                        "Ghosted"
+                        "Ghosted",
                         "Offer"
                     ],
-                    color="blue"
+                    color="black"
                 ),
 
                 link=dict(
                     source=source,
                     target=target,
                     value=value,
-                    color="red"
+                    color=color
                 )
             )
         ]

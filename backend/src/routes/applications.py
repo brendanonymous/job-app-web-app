@@ -13,10 +13,6 @@ from src.schemas.status_event import (
     StatusEventCreateRequest
     )
 
-# TODO: remove after cognito is integrated
-# NOTE: there must be a user record with this id
-LOCAL_DEV_USER_ID = 1
-
 # Initialize the router with a prefix and tags for automatic documentation
 applications_router = APIRouter(
     prefix="/applications",

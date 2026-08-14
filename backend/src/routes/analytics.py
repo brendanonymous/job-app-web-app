@@ -6,10 +6,6 @@ from src.models import Application, StatusEvent
 from src.visualizations.sankey import generate_sankey_dto
 from src.schemas.sankey import SankeyDto
 
-# TODO: remove after cognito is integrated
-# NOTE: there must be a user record with this id
-LOCAL_DEV_USER_ID = 1
-
 # Initialize the router with a prefix and tags for automatic documentation
 analytics_router = APIRouter(
     prefix="/analytics",

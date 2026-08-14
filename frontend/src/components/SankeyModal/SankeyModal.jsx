@@ -1,12 +1,14 @@
+import './SankeyModal.css'
 import { useState, useEffect } from 'react';
 import Plot from 'react-plotly.js';
-import { fetchSankeyData } from '../../api/analytics';
-import './SankeyModal.css'
+// import { fetchSankeyData } from '../../api/analytics';
+import { useAnalyticsApi } from '../../hooks/useAnalyticsApi';
 
 export default function SankeyModal() {
     const [sankeyData, setSankeyData] = useState(null);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
+    const { fetchSankeyData } = useAnalyticsApi();
 
     const labels = [
         'Applied',

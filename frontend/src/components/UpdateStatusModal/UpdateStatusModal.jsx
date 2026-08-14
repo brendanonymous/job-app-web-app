@@ -1,7 +1,9 @@
-import { useEffect, useState } from "react";
-import { addStatusEvent } from "../../api/applications";
-
 import "./UpdateStatusModal.css";
+import { useEffect, useState } from "react";
+// import { addStatusEvent } from "../../api/applications";
+const { addStatusEvent } = useAuthenticatedFetch();
+
+
 
 export default function UpdateStatusModal({
     selectedApplication,

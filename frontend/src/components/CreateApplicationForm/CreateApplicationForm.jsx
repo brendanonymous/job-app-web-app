@@ -1,7 +1,10 @@
-import { createApplication } from '../../api/applications';
 import './CreateApplicationForm.css';
+import { useApplicationsApi } from '../../hooks/useApplicationsApi';
+// import { createApplication } from '../../api/applications';
 
-export default function CreateApplicationForm({ onSuccess}) {
+export default function CreateApplicationForm({ onSuccess }) {
+    const { createApplication } = useApplicationsApi();
+
     async function handleSubmit(e) {
         e.preventDefault();
 

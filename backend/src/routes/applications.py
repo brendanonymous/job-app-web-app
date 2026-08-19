@@ -26,7 +26,7 @@ def get_applications(
     current_user: CurrentUser,
     session: Session = Depends(get_session),
 ) -> list[ApplicationListResponse]:
-    """Fetch all applications associated with the authenticated user."""
+    """Fetch all applications associated with the authed user."""
     applications = session.scalars(
         select(Application)
         .options(selectinload(Application.status_events))

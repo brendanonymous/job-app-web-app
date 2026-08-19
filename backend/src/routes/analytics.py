@@ -1,6 +1,8 @@
 from fastapi import APIRouter, Depends, status
+from typing import Annotated
 from sqlalchemy import select
 from sqlalchemy.orm import Session
+from src.auth import get_current_user
 from src.database import get_session
 from src.models import Application, StatusEvent
 from src.visualizations.sankey import generate_sankey_dto
@@ -12,13 +14,18 @@ analytics_router = APIRouter(
     tags=["analytics"],
 )
 
+CurrentUser = Annotated[User, Depends(get_current_user)]
+
 @analytics_router.get("/sankey", status_code=status.HTTP_200_OK, response_model=SankeyDto)
-def generate_sankey(session: Session = Depends(get_session)):
-    """Generate a Sankey dto and return to user as JSON"""
-    # get all applications and status events from the db
+def generate_sankey(
+    current_user: CurrentUser,
+    session: Session = Depends(get_session)):
+    """Generate a Sankey dto for the authed user's
+    application data and return to user as JSON"""
+
     applications = session.execute(
         select(Application)
-        .where(Application.user_id == LOCAL_DEV_USER_ID)
+        .where(Application.user_id == current_user.id)
     ).scalars().all()
 
     # collect all status paths and relabel them
@@ -35,5 +42,6 @@ def generate_sankey(session: Session = Depends(get_session)):
 
     sankey_dto = generate_sankey_dto(status_paths)
 
-    # return the Pydantic model directly; FastAPI will serialize to JSON
+    # return the Pydantic model directly. 
+    # FastAPI will serialize to JSON
     return sankey_dto

@@ -1,7 +1,7 @@
 import "./UpdateStatusModal.css";
 import { useEffect, useState } from "react";
 // import { addStatusEvent } from "../../api/applications";
-const { addStatusEvent } = useAuthenticatedFetch();
+const { useApplicationsApi } = '../../hooks/useApplicationsApi';
 
 
 
@@ -11,6 +11,7 @@ export default function UpdateStatusModal({
     onCancel,
 }) {
     const [selectedValue, setSelectedValue] = useState("");
+        const { addStatusEvent } = useApplicationsApi();
 
     useEffect(() => {
         setSelectedValue(selectedApplication?.current_status ?? "");

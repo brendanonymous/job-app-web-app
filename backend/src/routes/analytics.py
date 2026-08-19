@@ -4,7 +4,7 @@ from sqlalchemy import select
 from sqlalchemy.orm import Session
 from src.auth import get_current_user
 from src.database import get_session
-from src.models import Application, StatusEvent
+from src.models import Application, StatusEvent, User
 from src.visualizations.sankey import generate_sankey_dto
 from src.schemas.sankey import SankeyDto
 

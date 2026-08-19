@@ -22,10 +22,7 @@ applications_router = APIRouter(
 CurrentUser = Annotated[User, Depends(get_current_user)]
 
 @applications_router.get("", status_code=status.HTTP_200_OK)
-def get_applications(
-    current_user: CurrentUser,
-    session: Session = Depends(get_session),
-) -> list[ApplicationListResponse]:
+def get_applications(current_user: CurrentUser, session: Session = Depends(get_session)) -> list[ApplicationListResponse]:
     """Fetch all applications associated with the authed user."""
     applications = session.scalars(
         select(Application)

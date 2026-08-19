@@ -31,7 +31,7 @@ def get_user_from_token(session: Session, token: str) -> User:
             token,
             signing_key.key,
             algorithms=["RS256"],
-            audience=COGNITO_CLIENT_ID,
+            options={"verify_aud": False},
             issuer=COGNITO_ISSUER,
         )
     except ExpiredSignatureError as exc:
@@ -54,7 +54,11 @@ def get_user_from_token(session: Session, token: str) -> User:
         ) from exc
 
     cognito_id = payload.get("sub")
-    if not cognito_id:
+    if (
+        not cognito_id
+        or payload.get("token_use") != "access"
+        or payload.get("client_id") != COGNITO_CLIENT_ID
+    ):
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
             detail="Invalid authentication credentials",

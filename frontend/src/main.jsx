@@ -1,6 +1,5 @@
 import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
-import App from './App.jsx'
 import { AuthProvider } from "react-oidc-context";
 import './index.css'
 import AuthedApp from './components/AuthedApp/AuthedApp.jsx';

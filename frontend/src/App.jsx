@@ -8,60 +8,67 @@ import UpdateStatusModal from './components/UpdateStatusModal/UpdateStatusModal'
 import SankeyModal from './components/SankeyModal/SankeyModal';
 
 function App() {
-  const [showCreateModal, setShowCreateModal] = useState(false);
-  const [showSankeyModal, setShowSankeyModal] = useState(false);
+  const [activeModal, setActiveModal] = useState(null);
   const [refreshKey, setRefreshKey] = useState(0);
   const [selectedApplication, setSelectedApplication] = useState(null);
 
+  const openModal = (modal) => {
+    setActiveModal(modal);
+  };
+
+  const closeModal = () => {
+    setActiveModal(null);
+    setSelectedApplication(null);
+  };
+
+  const handleApplicationUpdated = () => {
+    setActiveModal(null);
+    setSelectedApplication(null);
+    setRefreshKey((prev) => prev + 1);
+  };
+
   const handleApplicationCreated = () => {
-    setShowCreateModal(false);
+    setActiveModal(null);
     setRefreshKey((prev) => prev + 1);
   };
 
   const handleApplicationSelected = (application) => {
     setSelectedApplication(application);
-  };
-
-  const handleStatusModalClosed = () => {
-    setSelectedApplication(null);
+    setActiveModal('update');
   };
 
   return (
     <>
       <h1>JobFlow</h1>
 
-
-      <button onClick={() => setShowSankeyModal(true)}>
+      {/* GENERATE SANKEY CHART */}
+      <button onClick={() => openModal('sankey')}>
         Generate Sankey Chart
       </button>
       <PopUp
-        showPopUp={showSankeyModal}
-        closePopUp={() => setShowSankeyModal(false)}>
+        showPopUp={activeModal === 'sankey'}
+        closePopUp={closeModal}>
         <SankeyModal/>
       </PopUp>
 
-
-      <button onClick={() => setShowCreateModal(true)}>
+      {/* ADD APPLICATION */}
+      <button onClick={() => openModal('create')}>
         Add New Application
       </button>
       <PopUp
-        showPopUp={showCreateModal}
-        closePopUp={() => setShowCreateModal(false)}>
+        showPopUp={activeModal === 'create'}
+        closePopUp={closeModal}>
         <CreateApplicationForm
           onSuccess={handleApplicationCreated}/>
       </PopUp>
 
-
+      {/* UPDATE APPLICATION STATUS */}
       <PopUp
-        showPopUp={selectedApplication !== null}
-        closePopUp={() => setSelectedApplication(null)}>
+        showPopUp={activeModal === 'update'}
+        closePopUp={closeModal}>
         <UpdateStatusModal
           selectedApplication={selectedApplication}
-          onSuccess={() => {
-            setSelectedApplication(null);
-            setRefreshKey((prev) => prev + 1);
-          }}
-          onCancel={() => setSelectedApplication(null)}/>
+          onSuccess={handleApplicationUpdated}/>
       </PopUp>
 
       <ApplicationsTable

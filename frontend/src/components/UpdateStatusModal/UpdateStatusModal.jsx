@@ -1,14 +1,10 @@
 import "./UpdateStatusModal.css";
 import { useEffect, useState } from "react";
-// import { addStatusEvent } from "../../api/applications";
-const { useApplicationsApi } = '../../hooks/useApplicationsApi';
-
-
+import { useApplicationsApi } from '../../hooks/useApplicationsApi';
 
 export default function UpdateStatusModal({
     selectedApplication,
     onSuccess,
-    onCancel,
 }) {
     const [selectedValue, setSelectedValue] = useState("");
         const { addStatusEvent } = useApplicationsApi();
@@ -60,10 +56,6 @@ export default function UpdateStatusModal({
 
             <button onClick={handleSave}>
                 Save
-            </button>
-
-            <button onClick={onCancel}>
-                Cancel
             </button>
         </div>
     );

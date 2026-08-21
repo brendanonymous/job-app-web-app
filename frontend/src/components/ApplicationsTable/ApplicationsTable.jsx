@@ -1,7 +1,6 @@
 import "./ApplicationsTable.css"
 import { useState, useEffect } from "react"
 import { useApplicationsApi } from '../../hooks/useApplicationsApi';
-// import { fetchApplications } from "../../api/applications";
 
 export default function ApplicationsTable({ refreshTrigger = 0,  onApplicationSelected}) {
     const [applications, setApplications] = useState([]);

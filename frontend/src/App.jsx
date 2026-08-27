@@ -1,5 +1,6 @@
 import './App.css';
 import { useState } from 'react';
+import { useAuth } from "react-oidc-context";
 
 import PopUp from './components/PopUp/PopUp';
 import ApplicationsTable from './components/ApplicationsTable/ApplicationsTable';
@@ -11,6 +12,20 @@ function App() {
   const [activeModal, setActiveModal] = useState(null);
   const [refreshKey, setRefreshKey] = useState(0);
   const [selectedApplication, setSelectedApplication] = useState(null);
+  const auth = useAuth();
+  
+  const handleSignout = async () => {
+    await auth.removeUser();
+
+    const clientId = "31o3ue4c6mdqqftjuvogtqdm13";
+    const logoutUri = "http://localhost:5173/";
+    const cognitoDomain =
+      "https://us-east-1izktuwo0g.auth.us-east-1.amazoncognito.com";
+
+    window.location.assign(
+      `${cognitoDomain}/logout?client_id=${clientId}&logout_uri=${encodeURIComponent(logoutUri)}`
+    );
+  };
 
   const openModal = (modal) => {
     setActiveModal(modal);
@@ -71,10 +86,16 @@ function App() {
           onSuccess={handleApplicationUpdated}/>
       </PopUp>
 
+      {/* LIST OF APPLICATIONS */}
       <ApplicationsTable
         refreshTrigger={refreshKey}
         onApplicationSelected={handleApplicationSelected}
       />
+
+      {/* SIGN OUT */}
+      <button onClick={handleSignout}>
+        Sign out
+      </button>
     </>
   );
 }
